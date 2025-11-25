@@ -48,18 +48,24 @@ jobs:
       - name: Verify build output
         run: |
           echo "=== Checking dist folder ==="
-          ls -la ./app/frontend/dist/ || echo "ERROR: dist folder not found"
-          echo ""
-          echo "=== Checking index.html ==="
-          if [ -f ./app/frontend/dist/index.html ]; then
-            echo "First 30 lines of index.html:"
-            head -30 ./app/frontend/dist/index.html
+          if [ -d ./app/frontend/dist ]; then
+            ls -la ./app/frontend/dist/
+            echo ""
+            echo "=== Checking index.html ==="
+            if [ -f ./app/frontend/dist/index.html ]; then
+              echo "First 30 lines of index.html:"
+              head -30 ./app/frontend/dist/index.html
+            else
+              echo "ERROR: index.html not found"
+              exit 1
+            fi
+            echo ""
+            echo "=== Checking assets folder ==="
+            ls -la ./app/frontend/dist/assets/ 2>/dev/null || echo "WARNING: assets folder not found or empty"
           else
-            echo "ERROR: index.html not found"
+            echo "ERROR: dist folder does not exist. Build failed."
+            exit 1
           fi
-          echo ""
-          echo "=== Checking assets folder ==="
-          ls -la ./app/frontend/dist/assets/ 2>/dev/null || echo "WARNING: assets folder not found or empty"
 
       - name: Create .nojekyll file
         run: |
