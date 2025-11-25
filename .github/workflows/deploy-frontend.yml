@@ -42,10 +42,28 @@ jobs:
 
       - name: Build
         working-directory: ./app/frontend
-        run: npm run build
+        run: |
+          echo "Building with VITE_BASE_PATH=/app_alimentacion/"
+          export VITE_BASE_PATH=/app_alimentacion/
+          npm run build
         env:
-          VITE_BASE_PATH: /app_alimentacion/
           NODE_ENV: production
+
+      - name: Verify build output
+        run: |
+          echo "=== Checking dist folder ==="
+          ls -la ./app/frontend/dist/ || echo "ERROR: dist folder not found"
+          echo ""
+          echo "=== Checking index.html ==="
+          if [ -f ./app/frontend/dist/index.html ]; then
+            echo "First 30 lines of index.html:"
+            head -30 ./app/frontend/dist/index.html
+          else
+            echo "ERROR: index.html not found"
+          fi
+          echo ""
+          echo "=== Checking assets folder ==="
+          ls -la ./app/frontend/dist/assets/ 2>/dev/null || echo "WARNING: assets folder not found or empty"
 
       - name: Create .nojekyll file
         run: touch ./app/frontend/dist/.nojekyll
