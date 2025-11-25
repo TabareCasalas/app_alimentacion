@@ -42,11 +42,18 @@ jobs:
         working-directory: ./app/frontend
         run: |
           echo "Starting build..."
-          npm run build || {
-            echo "Build failed. Checking for errors..."
-            exit 1
-          }
-          echo "Build completed successfully"
+          echo "Current directory: $(pwd)"
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo ""
+          echo "Running TypeScript check..."
+          npx tsc --noEmit || echo "TypeScript check completed with errors"
+          echo ""
+          echo "Running Vite build..."
+          npm run build 2>&1
+          echo ""
+          echo "Build step completed. Checking if dist exists..."
+          ls -la dist/ 2>&1 || echo "dist folder not found"
         env:
           VITE_BASE_PATH: /
           NODE_ENV: production
