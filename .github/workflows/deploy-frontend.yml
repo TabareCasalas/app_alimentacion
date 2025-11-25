@@ -46,45 +46,44 @@ jobs:
           echo "Node version: $(node --version)"
           echo "NPM version: $(npm --version)"
           echo ""
-          echo "Running TypeScript check..."
-          npx tsc --noEmit || echo "TypeScript check completed with errors"
+          echo "Running build..."
+          npm run build
           echo ""
-          echo "Running Vite build..."
-          npm run build 2>&1
-          echo ""
-          echo "Build step completed. Checking if dist exists..."
-          ls -la dist/ 2>&1 || echo "dist folder not found"
+          echo "Build completed. Checking dist folder..."
+          ls -la dist/ || echo "ERROR: dist folder not found"
         env:
           VITE_BASE_PATH: /
           NODE_ENV: production
 
       - name: Verify build output
+        working-directory: ./app/frontend
         run: |
           echo "=== Checking dist folder ==="
-          if [ -d ./app/frontend/dist ]; then
-            ls -la ./app/frontend/dist/
+          if [ -d dist ]; then
+            ls -la dist/
             echo ""
             echo "=== Checking index.html ==="
-            if [ -f ./app/frontend/dist/index.html ]; then
+            if [ -f dist/index.html ]; then
               echo "First 30 lines of index.html:"
-              head -30 ./app/frontend/dist/index.html
+              head -30 dist/index.html
             else
               echo "ERROR: index.html not found"
               exit 1
             fi
             echo ""
             echo "=== Checking assets folder ==="
-            ls -la ./app/frontend/dist/assets/ 2>/dev/null || echo "WARNING: assets folder not found or empty"
+            ls -la dist/assets/ 2>/dev/null || echo "WARNING: assets folder not found or empty"
           else
             echo "ERROR: dist folder does not exist. Build failed."
             exit 1
           fi
 
       - name: Create .nojekyll file
+        working-directory: ./app/frontend
         run: |
-          touch ./app/frontend/dist/.nojekyll
+          touch dist/.nojekyll
           echo "Created .nojekyll file to disable Jekyll processing"
-          ls -la ./app/frontend/dist/.nojekyll
+          ls -la dist/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -92,7 +91,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './app/frontend/dist'
+          path: 'app/frontend/dist'
 
   deploy:
     environment:
