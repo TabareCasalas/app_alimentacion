@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vaca {
+  id        Int      @id @default(autoincrement())
+  peso      Float
+  litros    Float
+  grasa     Float
+  fecha     DateTime @default(now())
+  dietas    Dieta[]
+
+  @@map("vacas")
+}
+
+model Dieta {
+  id          Int      @id @default(autoincrement())
+  vacaId      Int
+  descripcion String
+  fecha       DateTime @default(now())
+  vaca        Vaca     @relation(fields: [vacaId], references: [id], onDelete: Cascade)
+
+  @@map("dietas")
+}
+
