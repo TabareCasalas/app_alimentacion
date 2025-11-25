@@ -26,7 +26,7 @@ Tu sitio estará disponible en:
 https://{tu-usuario}.github.io/{nombre-repositorio}/
 ```
 
-## Base Path
+## Base Path.
 
 El base path se configura automáticamente basado en el nombre del repositorio. Si necesitas cambiarlo:
 
