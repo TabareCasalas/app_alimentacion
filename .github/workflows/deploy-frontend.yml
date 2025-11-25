@@ -40,7 +40,13 @@ jobs:
 
       - name: Build
         working-directory: ./app/frontend
-        run: npm run build
+        run: |
+          echo "Starting build..."
+          npm run build || {
+            echo "Build failed. Checking for errors..."
+            exit 1
+          }
+          echo "Build completed successfully"
         env:
           VITE_BASE_PATH: /
           NODE_ENV: production
