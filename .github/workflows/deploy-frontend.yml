@@ -52,7 +52,7 @@ jobs:
           echo "Build completed. Checking dist folder..."
           ls -la dist/ || echo "ERROR: dist folder not found"
         env:
-          VITE_BASE_PATH: /
+          VITE_BASE_PATH: /app_alimentacion/
           NODE_ENV: production
 
       - name: Verify build output
