@@ -44,6 +44,7 @@ jobs:
         run: npm run build
         env:
           VITE_BASE_PATH: /app_alimentacion/
+        working-directory: ./app/frontend
 
       - name: Create .nojekyll file
         run: touch ./app/frontend/dist/.nojekyll
