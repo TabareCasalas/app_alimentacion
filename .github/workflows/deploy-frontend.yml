@@ -41,10 +41,11 @@ jobs:
         working-directory: ./app/frontend
 
       - name: Build
+        working-directory: ./app/frontend
         run: npm run build
         env:
           VITE_BASE_PATH: /app_alimentacion/
-        working-directory: ./app/frontend
+          NODE_ENV: production
 
       - name: Create .nojekyll file
         run: touch ./app/frontend/dist/.nojekyll
